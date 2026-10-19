@@ -221,3 +221,5 @@ __marimo__/
 
 # Temporary data files
 data/
+
+local.settings.json

@@ -30,6 +30,7 @@ BASE_URL = f"{API_HOST}/api/market-prices/v1"
 PAGE_SIZE = 10_000  # API maximum per request
 
 app = func.FunctionApp()
+logging.getLogger("azure").setLevel(logging.WARNING)
 
 
 def _session() -> requests.Session:

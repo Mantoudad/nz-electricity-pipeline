@@ -1,0 +1,14 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "AzureWebJobsStorage": "<storage account connection string>",
+    "LAKE_CONNECTION_STRING": "<storage account connection string>",
+    "LAKE_CONTAINER": "bronze",
+    "WITS_CLIENT_ID": "<your client id>",
+    "WITS_CLIENT_SECRET": "<your client secret>",
+    "WITS_SCHEDULES": "RTD",
+    "WITS_MARKET_TYPE": "E",
+    "WITS_BACK_PERIODS": "2"
+  }
+}

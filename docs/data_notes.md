@@ -32,3 +32,26 @@ JSON response:
     ...
   ]
 }
+
+## Storage cost estimate (bronze layer)
+
+- File size: ~25 KB per run (gzipped JSON, ~3,400 RTD records across all nodes)
+- Volume: 288 runs/day (every 5 min) → ~7 MB/day → ~210 MB/month (~2.5 GB/year)
+- Storage cost: ADLS Gen2 Hot tier (LRS) is a few cents per GB-month,
+  so storage costs well under US$0.01/month initially, and still only cents/month after a year
+- Write operations: ~8,600 uploads/month, also only cents at current transaction pricing
+- gzip keeps files small; raw JSON is estimated to be ~10x larger (to be verified)
+- Future optimisation: lifecycle policy to move older raw files to the Cool tier
+
+## Time zones in the bronze layer
+
+- Ingestion timestamps use UTC (set in function_app.py via datetime.now(timezone.utc)):
+  - folder partition: date=YYYY-MM-DD (UTC date)
+  - file name: rtd_E_YYYYMMDDTHHMMSSZ.json.gz ("Z" = UTC)
+  - payload field: ingestedAt (UTC, ISO 8601)
+- Price data keeps the source time zone: tradingDateTime and lastRunTime are
+  NZ local time with offset (+13:00 NZDT / +12:00 NZST)
+- So a UTC date folder does not match an NZ calendar day:
+  in NZDT the folder switches at 13:00 NZ time (12:00 in NZST)
+- Silver layer will store both trading_datetime_utc and trading_datetime_nz,
+  and derive the NZ trading date from tradingDateTime, not from the folder name
